@@ -1,4 +1,4 @@
-# Marketfy React - E-Commerce Platform
+# Marketfy React
 
 A modern, full-featured e-commerce platform built with React, TypeScript, Redux Toolkit, and Material-UI. This is a complete React implementation migrated from Angular, following best practices, clean code principles, and SOLID design patterns.
 
@@ -181,4 +181,4 @@ VITE_API_URL=http://localhost:3000
 
 ---
 
-**Ready to code?** Open **COMPONENT_TEMPLATES.md** and start building! 🚀
+**Ready to code?** I recommend you to use/open **COMPONENT_TEMPLATES.md** and start building! 🚀
