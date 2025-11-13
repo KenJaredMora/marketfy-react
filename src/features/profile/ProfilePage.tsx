@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Box, Button, Container, Paper, TextField, Typography, Grid2 as Grid } from '@mui/material';
+import { Alert, Box, Button, Container, Grid2 as Grid, Paper, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -7,7 +7,7 @@ import { useAppSelector } from '../../app/store/hooks';
 import { selectCurrentUser } from '../../app/store/selectors';
 import { usersService } from '../../core/api/services';
 import { useToast } from '../../core/hooks';
-import { UpdateUserDto } from '../../core/types';
+import type { UpdateUserDto } from '../../core/types';
 
 const schema = yup.object({
   displayName: yup.string().min(3).max(50).required(),

@@ -1,5 +1,5 @@
+import type { WishlistItem } from '../../types';
 import apiClient from '../apiClient';
-import { WishlistItem } from '../../types';
 
 /**
  * Wishlist Service
@@ -43,7 +43,7 @@ export class WishlistService {
   /**
    * Check if product is in wishlist
    */
-  async isInWishlist(productId: number, wishlistItems: WishlistItem[]): boolean {
+  isInWishlist(productId: number, wishlistItems: WishlistItem[]): boolean {
     return wishlistItems.some((item) => item.productId === productId);
   }
 

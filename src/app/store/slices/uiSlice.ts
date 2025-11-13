@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ToastMessage } from '../../../core/types';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { ToastMessage } from '../../../core/types';
 import { generateId } from '../../../core/utils';
 
 interface UIState {

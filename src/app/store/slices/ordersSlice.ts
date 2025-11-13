@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ordersService, CreateOrderDto } from '../../../core/api/services/ordersService';
-import { Order } from '../../../core/types';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import type { CreateOrderDto } from '../../../core/api/services/ordersService';
+import { ordersService } from '../../../core/api/services/ordersService';
+import type { Order } from '../../../core/types';
 
 interface OrdersState {
   orders: Order[];

@@ -1,10 +1,10 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Alert, Box, Button, CircularProgress, TextField } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { TextField, Button, Box, Alert, CircularProgress } from '@mui/material';
 import { useAuth } from '../../../core/hooks';
-import { LoginCredentials } from '../../../core/types';
+import type { LoginCredentials } from '../../../core/types';
 
 const schema = yup.object({
   email: yup.string().email('Invalid email format').required('Email is required'),

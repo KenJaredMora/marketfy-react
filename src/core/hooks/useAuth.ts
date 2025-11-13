@@ -2,20 +2,20 @@ import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
 import {
-  login as loginAction,
-  register as registerAction,
-  logout as logoutAction,
-  fetchCurrentUser,
-} from '../../app/store/slices/authSlice';
-import { clearWishlist } from '../../app/store/slices/wishlistSlice';
-import { clearOrders } from '../../app/store/slices/ordersSlice';
-import {
-  selectIsAuthenticated,
-  selectCurrentUser,
-  selectAuthLoading,
   selectAuthError,
+  selectAuthLoading,
+  selectCurrentUser,
+  selectIsAuthenticated,
 } from '../../app/store/selectors';
-import { LoginCredentials, RegisterData } from '../types';
+import {
+  fetchCurrentUser,
+  login as loginAction,
+  logout as logoutAction,
+  register as registerAction,
+} from '../../app/store/slices/authSlice';
+import { clearOrders } from '../../app/store/slices/ordersSlice';
+import { clearWishlist } from '../../app/store/slices/wishlistSlice';
+import type { LoginCredentials, RegisterData } from '../types';
 
 /**
  * Custom hook for authentication operations

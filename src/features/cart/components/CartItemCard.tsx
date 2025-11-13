@@ -1,8 +1,8 @@
+import { Add, Delete, Remove } from '@mui/icons-material';
+import { Box, Button, Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, IconButton, Box, Button } from '@mui/material';
-import { Delete, Add, Remove } from '@mui/icons-material';
-import { CartItem } from '../../../core/types';
 import { useCart } from '../../../core/hooks';
+import type { CartItem } from '../../../core/types';
 import { formatCurrency } from '../../../core/utils';
 
 interface CartItemCardProps {

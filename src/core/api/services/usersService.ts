@@ -1,5 +1,5 @@
+import type { UpdateUserDto, User } from '../../types';
 import apiClient from '../apiClient';
-import { User, UpdateUserDto } from '../../types';
 
 /**
  * Users Service

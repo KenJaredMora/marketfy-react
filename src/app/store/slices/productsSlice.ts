@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { productsService } from '../../../core/api/services';
-import { Product, ProductsResponse, ProductSearchParams } from '../../../core/types';
+import type { Product, ProductSearchParams, ProductsResponse } from '../../../core/types';
 
 interface ProductsState {
   products: Product[];
@@ -35,7 +35,7 @@ export const fetchProducts = createAsyncThunk<ProductsResponse, ProductSearchPar
   'products/fetchProducts',
   async (params, { rejectWithValue }) => {
     try {
-      const response = await productsService.getProducts(params);
+      const response = await productsService.getProducts(params || undefined);
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Failed to fetch products');

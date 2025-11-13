@@ -1,19 +1,19 @@
-import React from 'react';
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Typography,
-  IconButton,
-  Button,
-  Chip,
-  Box,
-} from '@mui/material';
 import { Favorite, FavoriteBorder, ShoppingCart } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Chip,
+  IconButton,
+  Typography,
+} from '@mui/material';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Product } from '../../../core/types';
-import { useCart, useWishlist, useAuth } from '../../../core/hooks';
+import { useAuth, useCart, useWishlist } from '../../../core/hooks';
+import type { Product } from '../../../core/types';
 import { formatCurrency } from '../../../core/utils';
 
 interface ProductCardProps {

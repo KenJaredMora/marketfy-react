@@ -1,5 +1,5 @@
+import type { CartItem, CheckoutFormData, Order } from '../../types';
 import apiClient from '../apiClient';
-import { Order, CheckoutFormData, CartItem } from '../../types';
 
 export interface CreateOrderDto {
   items: Array<{

@@ -1,21 +1,20 @@
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
 import {
+  selectCartItemCount,
+  selectCartItems,
+  selectCartTotal
+} from '../../app/store/selectors';
+import {
   addToCart as addToCartAction,
+  clearCart as clearCartAction,
+  decreaseQuantity as decreaseQuantityAction,
+  increaseQuantity as increaseQuantityAction,
   removeFromCart as removeFromCartAction,
   updateQuantity as updateQuantityAction,
-  increaseQuantity as increaseQuantityAction,
-  decreaseQuantity as decreaseQuantityAction,
-  clearCart as clearCartAction,
 } from '../../app/store/slices/cartSlice';
-import {
-  selectCartItems,
-  selectCartTotal,
-  selectCartItemCount,
-  selectIsInCart,
-} from '../../app/store/selectors';
 import { showSuccessToast } from '../../app/store/slices/uiSlice';
-import { Product } from '../types';
+import type { Product } from '../types';
 
 /**
  * Custom hook for cart operations

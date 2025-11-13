@@ -1,5 +1,5 @@
+import type { Product, ProductSearchParams, ProductsResponse } from '../../types';
 import apiClient from '../apiClient';
-import { Product, ProductsResponse, ProductSearchParams } from '../../types';
 
 /**
  * Products Service

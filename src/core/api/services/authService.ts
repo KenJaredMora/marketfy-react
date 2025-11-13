@@ -1,5 +1,5 @@
+import type { AuthResponse, LoginCredentials, RegisterData, User } from '../../types';
 import apiClient from '../apiClient';
-import { AuthResponse, LoginCredentials, RegisterData, User } from '../../types';
 
 /**
  * Authentication Service
