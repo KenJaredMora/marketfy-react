@@ -1,5 +1,5 @@
 import { ArrowBack } from '@mui/icons-material';
-import { Box, Button, Container, Divider, Paper, Typography, Grid2 as Grid } from '@mui/material';
+import { Box, Button, Container, Divider, Grid, Paper, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/store/hooks';

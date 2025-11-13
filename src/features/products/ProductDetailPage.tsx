@@ -6,10 +6,10 @@ import {
   Chip,
   CircularProgress,
   Container,
+  Grid,
   IconButton,
   Paper,
   Typography,
-  Grid2 as Grid,
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';

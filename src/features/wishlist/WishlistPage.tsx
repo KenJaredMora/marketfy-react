@@ -1,5 +1,5 @@
 import { Delete, Favorite, ShoppingCart } from '@mui/icons-material';
-import { Button, Card, CardActions, CardContent, CardMedia, Container, Typography, Grid2 as Grid } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart, useWishlist } from '../../core/hooks';

@@ -1,31 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Container,
-  Box,
-  Typography,
-  TextField,
-  Pagination,
-  InputAdornment,
-  CircularProgress,
-  Alert,
-  Grid2 as Grid,
-} from '@mui/material';
 import { Search } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
-import { fetchProducts, setPage } from '../../app/store/slices/productsSlice';
 import {
-  selectProductsList,
-  selectProductsPagination,
-  selectProductsLoading,
+  Alert,
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  InputAdornment,
+  Pagination,
+  TextField,
+  Typography,
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
+import {
   selectProductsError,
+  selectProductsList,
+  selectProductsLoading,
+  selectProductsPagination,
 } from '../../app/store/selectors';
-import ProductCard from './components/ProductCard';
+import { fetchProducts, setPage } from '../../app/store/slices/productsSlice';
 import { useDebounce } from '../../core/hooks';
+import ProductCard from './components/ProductCard';
 
 const ProductsPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const products = useAppSelector(selectProductsList);
-  const { page, totalPages, total } = useAppSelector(selectProductsPagination);
+
+  // ✅ Normalize products to an empty array if selector returns undefined/null
+  const productsFromStore = useAppSelector(selectProductsList);
+  const products = productsFromStore ?? [];
+
+  // ✅ Add safe defaults for pagination fields
+  const pagination = useAppSelector(selectProductsPagination);
+  const page = pagination?.page ?? 1;
+  const totalPages = pagination?.totalPages ?? 1;
+  const total = pagination?.total ?? products.length;
+
   const isLoading = useAppSelector(selectProductsLoading);
   const error = useAppSelector(selectProductsError);
 

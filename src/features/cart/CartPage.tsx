@@ -1,10 +1,10 @@
-import React from 'react';
-import { Container, Typography, Button, Box, Paper, Divider, Grid2 as Grid } from '@mui/material';
 import { ShoppingCart as ShoppingCartIcon } from '@mui/icons-material';
+import { Box, Button, Container, Divider, Grid, Paper, Typography } from '@mui/material';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCart, useAuth } from '../../core/hooks';
-import CartItemCard from './components/CartItemCard';
+import { useAuth, useCart } from '../../core/hooks';
 import { formatCurrency } from '../../core/utils';
+import CartItemCard from './components/CartItemCard';
 
 const CartPage: React.FC = () => {
   const navigate = useNavigate();

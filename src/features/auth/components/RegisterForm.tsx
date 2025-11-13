@@ -1,28 +1,43 @@
+// src/features/auth/components/RegisterForm.tsx
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Box, Button, CircularProgress, Grid, TextField } from '@mui/material';
 import React from 'react';
+import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useAuth } from '../../../core/hooks';
 import type { RegisterData } from '../../../core/types';
 
-const schema = yup.object({
-  email: yup.string().email('Invalid email format').required('Email is required'),
-  password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
-  displayName: yup.string().min(3, 'Display name must be at least 3 characters').required('Display name is required'),
-  firstName: yup.string(),
-  lastName: yup.string(),
-  bio: yup.string().max(500, 'Bio must be at most 500 characters'),
-}).required();
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .email('Invalid email format')
+      .required('Email is required'),
+    password: yup
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .required('Password is required'),
+    displayName: yup
+      .string()
+      .min(3, 'Display name must be at least 3 characters')
+      .required('Display name is required'),
+    firstName: yup.string().optional(),
+    lastName: yup.string().optional(),
+    bio: yup.string().max(500, 'Bio must be at most 500 characters').optional(),
+  })
+  .required();
 
 const RegisterForm: React.FC = () => {
   const { register: registerUser, isLoading, error } = useAuth();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterData>({
-    resolver: yupResolver(schema),
+    // Cast resolver to any so TS doesn’t force Yup’s internal type
+    resolver: yupResolver(schema) as any,
     defaultValues: {
       email: '',
       password: '',
@@ -34,7 +49,7 @@ const RegisterForm: React.FC = () => {
     },
   });
 
-  const onSubmit = async (data: RegisterData) => {
+  const onSubmit: SubmitHandler<RegisterData> = async (data) => {
     await registerUser(data);
   };
 
@@ -69,7 +84,7 @@ const RegisterForm: React.FC = () => {
       />
 
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="First Name (Optional)"
@@ -80,7 +95,7 @@ const RegisterForm: React.FC = () => {
             disabled={isLoading}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="Last Name (Optional)"
