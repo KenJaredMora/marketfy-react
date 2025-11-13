@@ -15,11 +15,11 @@ cd marketfy-react
 npm run dev
 ```
 
-The app will run at http://localhost:5173
+The app will run at <http://localhost:5173>
 
 ## 🎯 Demo Credentials
 
-```
+```md
 Email: demo@marketfy.test
 Password: password123
 ```
@@ -55,7 +55,7 @@ Password: password123
 
 ## 📁 Project Structure
 
-```
+```md
 src/
 ├── app/                # App configuration
 │   ├── store/         # Redux store
@@ -79,6 +79,7 @@ src/
 ## 🎨 Architecture Highlights
 
 ### ✅ Completed Infrastructure (100%)
+
 - Redux store with slices for all features
 - API client with interceptors
 - Custom hooks (useAuth, useCart, useWishlist, etc.)
@@ -89,7 +90,9 @@ src/
 - Type-safe TypeScript throughout
 
 ### 🔄 Next: Implement Features
+
 Use the templates in **COMPONENT_TEMPLATES.md** to build:
+
 1. Authentication pages (Login/Register)
 2. Products page with search
 3. Cart & Wishlist pages
@@ -125,11 +128,13 @@ VITE_API_URL=http://localhost:3000
 **Base**: `http://localhost:3000`
 
 ### Public
+
 - `GET /products` - List products
 - `POST /auth/login` - Login
 - `POST /auth/register` - Register
 
 ### Protected (require JWT token)
+
 - `GET /wishlist` - Get wishlist
 - `POST /orders` - Create order
 - `GET /orders` - Order history
@@ -170,13 +175,16 @@ VITE_API_URL=http://localhost:3000
 ## 🐛 Troubleshooting
 
 **Backend not connecting?**
+
 - Check backend is running on port 3000
 - Verify `.env` has correct API_URL
 
 **Build errors?**
+
 - Clear cache: `rm -rf node_modules && npm install`
 
 **TypeScript errors?**
+
 - Restart TypeScript server in VS Code
 
 ---
