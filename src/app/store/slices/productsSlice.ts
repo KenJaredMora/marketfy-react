@@ -132,11 +132,15 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products = action.payload.data;
+
+        // Backend returns { items, total, page, limit }
+        state.products = action.payload.items;
         state.total = action.payload.total;
         state.page = action.payload.page;
         state.limit = action.payload.limit;
-        state.totalPages = action.payload.totalPages;
+
+        // Calculate totalPages
+        state.totalPages = Math.ceil(action.payload.total / action.payload.limit);
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.isLoading = false;
@@ -166,11 +170,13 @@ const productsSlice = createSlice({
       })
       .addCase(searchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products = action.payload.data;
+
+        state.products = action.payload.items;
         state.total = action.payload.total;
         state.page = action.payload.page;
         state.limit = action.payload.limit;
-        state.totalPages = action.payload.totalPages;
+
+        state.totalPages = Math.ceil(action.payload.total / action.payload.limit);
       })
       .addCase(searchProducts.rejected, (state, action) => {
         state.isLoading = false;

@@ -9,13 +9,20 @@ export interface Product {
   stock?: number;
 }
 
-export interface ProductsResponse {
+/* export interface ProductsResponse {
   data: Product[];
   total: number;
   page: number;
   limit: number;
   totalPages: number;
+} */
+export interface ProductsResponse {
+  items: Product[];
+  total: number;
+  page: number;
+  limit: number;
 }
+
 
 // Cart Types
 export interface CartItem {
@@ -42,21 +49,23 @@ export interface WishlistItem {
 export interface OrderItem {
   product: Product;
   qty: number;
-  price: number;
+  // price?: number; // if we ever decide to store price per item
 }
 
 export interface Order {
   orderId: string;
   userId: number;
   items: OrderItem[];
-  subtotal: number;
-  shipping: number;
-  discount: number;
   total: number;
-  status: string;
-  shippingAddress: ShippingAddress;
+  status?: string;
   createdAt: string;
   updatedAt: string;
+
+  // Optional / derived fields (frontend only)
+  subtotal?: number;
+  shipping?: number;
+  discount?: number;
+  shippingAddress?: ShippingAddress;
 }
 
 export interface ShippingAddress {

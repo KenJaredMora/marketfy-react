@@ -4,7 +4,8 @@
  */
 
 export { authService, AuthService } from './authService';
+export { ordersService } from './ordersService';
 export { productsService, ProductsService } from './productsService';
-export { wishlistService, WishlistService } from './wishlistService';
-export { ordersService, OrdersService } from './ordersService';
 export { usersService, UsersService } from './usersService';
+export { wishlistService, WishlistService } from './wishlistService';
+

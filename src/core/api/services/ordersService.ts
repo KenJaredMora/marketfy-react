@@ -1,118 +1,128 @@
+// src/core/api/services/ordersService.ts
 import type { CartItem, CheckoutFormData, Order } from '../../types';
 import apiClient from '../apiClient';
 
-export interface CreateOrderDto {
-  items: Array<{
-    productId: number;
-    qty: number;
-    price: number;
-  }>;
-  subtotal: number;
-  shipping: number;
-  discount: number;
-  total: number;
-  shippingAddress: CheckoutFormData;
+export interface CreateOrderItemDto {
+  product: any;   // matches backend: product: any
+  qty: number;
 }
 
-/**
- * Orders Service
- * Implements Single Responsibility Principle - handles only order operations
- */
-export class OrdersService {
+export interface CreateOrderDto {
+  items: CreateOrderItemDto[];
+  total: number;
+}
+
+class OrdersService {
   private readonly ORDERS_ENDPOINT = '/orders';
 
   /**
-   * Create new order
+   * Create order (POST /orders)
+   * Sends ONLY the fields expected by the backend DTO
    */
-  async createOrder(orderData: CreateOrderDto): Promise<Order> {
-    const response = await apiClient.post<Order>(this.ORDERS_ENDPOINT, orderData);
+  async createOrder(dto: CreateOrderDto): Promise<Order> {
+    const response = await apiClient.post<Order>(this.ORDERS_ENDPOINT, dto);
     return response;
   }
 
   /**
-   * Get user's order history
+   * Get user orders (GET /orders)
+   * Backend returns { data, total, page, limit }
+   * We only care about data (array of orders) on the frontend.
    */
-  async getOrders(page: number = 1, limit: number = 10): Promise<Order[]> {
-    const response = await apiClient.get<Order[]>(this.ORDERS_ENDPOINT, {
-      page,
-      limit,
-    });
-    return response;
+  async getOrders(page?: number, limit?: number): Promise<Order[]> {
+    const params: Record<string, any> = {};
+    if (page != null) params.page = page;
+    if (limit != null) params.limit = limit;
+
+    const response = await apiClient.get<{
+      data: Order[];
+      total: number;
+      page: number;
+      limit: number;
+    }>(this.ORDERS_ENDPOINT, params);
+
+    return response.data;
   }
 
   /**
-   * Get single order by ID
+   * Get order by orderId (GET /orders/:orderId)
    */
   async getOrderById(orderId: string): Promise<Order> {
-    const response = await apiClient.get<Order>(`${this.ORDERS_ENDPOINT}/${orderId}`);
+    const response = await apiClient.get<Order>(
+      `${this.ORDERS_ENDPOINT}/${orderId}`
+    );
     return response;
   }
 
   /**
-   * Search orders by order ID
+   * "Search" orders client-side by orderId
+   * (since backend doesn't expose a search endpoint)
    */
   async searchOrders(query: string): Promise<Order[]> {
-    const response = await apiClient.get<Order[]>(this.ORDERS_ENDPOINT, {
-      search: query,
-    });
-    return response;
+    const all = await this.getOrders();
+    const q = query.toLowerCase();
+    return all.filter((o) => (o.orderId ?? '').toLowerCase().includes(q));
   }
 
   /**
-   * Calculate shipping cost based on method
+   * Shipping calculation – used in CheckoutPage
    */
-  calculateShipping(method: 'standard' | 'express' | 'overnight'): number {
-    const shippingCosts = {
-      standard: 5.99,
-      express: 12.99,
-      overnight: 24.99,
-    };
-    return shippingCosts[method];
+  calculateShipping(
+    method: 'standard' | 'express' | 'overnight'
+  ): number {
+    switch (method) {
+      case 'express':
+        return 12.99;
+      case 'overnight':
+        return 24.99;
+      default:
+        return 5.99;
+    }
   }
 
   /**
-   * Apply promo code discount
+   * Promo code logic – used in CheckoutPage
    */
   applyPromoCode(code: string, subtotal: number): number {
-    const promoCodes: Record<string, number> = {
-      SAVE10: 0.1, // 10% off
-      SAVE20: 0.2, // 20% off
-      FIRSTORDER: 0.15, // 15% off
-    };
+    const normalized = code.trim().toUpperCase();
 
-    const discount = promoCodes[code.toUpperCase()] || 0;
-    return subtotal * discount;
+    if (!normalized) return 0;
+    if (normalized === 'SAVE10') return subtotal * 0.1;
+    if (normalized === 'SAVE20') return subtotal * 0.2;
+    if (normalized === 'FIRSTORDER') return Math.min(15, subtotal * 0.15);
+
+    // Unknown code → no discount
+    return 0;
   }
 
   /**
-   * Prepare order data from cart items
+   * Prepare payload to send to backend
+   *
+   * IMPORTANT: we only include:
+   *   - items: { product: any, qty: number }[]
+   *   - total: number
+   *
+   * Backend does NOT accept subtotal, shipping, discount, shippingAddress, etc.
    */
   prepareOrderData(
-    cartItems: CartItem[],
-    formData: CheckoutFormData,
-    subtotal: number
+    items: CartItem[],
+    _checkout: CheckoutFormData, // kept for future use if backend is extended
+    total: number
   ): CreateOrderDto {
-    const shipping = this.calculateShipping(formData.shippingMethod);
-    const discount = formData.promoCode
-      ? this.applyPromoCode(formData.promoCode, subtotal)
-      : 0;
-    const total = subtotal + shipping - discount;
-
     return {
-      items: cartItems.map((item) => ({
-        productId: item.product.id,
+      items: items.map((item) => ({
+        product: {
+          id: item.product.id,
+          name: item.product.name,
+          price: item.product.price,
+          imageUrl: item.product.imageUrl,
+        },
         qty: item.qty,
-        price: item.product.price,
       })),
-      subtotal,
-      shipping,
-      discount,
       total,
-      shippingAddress: formData,
     };
   }
 }
 
-// Export singleton instance
 export const ordersService = new OrdersService();
 export default ordersService;

@@ -42,7 +42,7 @@ const ProductsPage: React.FC = () => {
   const debouncedSearch = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    dispatch(fetchProducts({ page, limit: 12, q: debouncedSearch }));
+    dispatch(fetchProducts({ page: Number(page), limit: 12, q: debouncedSearch }));
   }, [dispatch, page, debouncedSearch]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {

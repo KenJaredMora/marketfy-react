@@ -95,7 +95,7 @@ const CheckoutPage: React.FC = () => {
     setError(null);
 
     try {
-      const orderData = ordersService.prepareOrderData(items, data, total);
+      const orderData = ordersService.prepareOrderData(items, data, finalTotal);
       await dispatch(createOrder(orderData)).unwrap();
       clearCart();
       navigate('/orders');
