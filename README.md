@@ -179,10 +179,6 @@ VITE_API_URL=http://localhost:3000
 **TypeScript errors?**
 - Restart TypeScript server in VS Code
 
-## 📄 License
-
-Training project for Deloitte.
-
 ---
 
 **Ready to code?** Open **COMPONENT_TEMPLATES.md** and start building! 🚀
