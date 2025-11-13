@@ -1,5 +1,6 @@
+import type { AlertColor } from '@mui/material';
+import { Alert, Snackbar } from '@mui/material';
 import React from 'react';
-import { Snackbar, Alert, AlertColor } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
 import { selectToasts } from '../../app/store/selectors';
 import { removeToast } from '../../app/store/slices/uiSlice';

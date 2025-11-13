@@ -1,5 +1,15 @@
 import { Receipt, Search } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, Container, InputAdornment, TextField, Typography, Grid2 as Grid } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/store/hooks';
@@ -10,7 +20,11 @@ import { formatCurrency, formatDate } from '../../core/utils';
 const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const orders = useAppSelector(selectOrdersList);
+
+  // ✅ Ensure orders is ALWAYS an array
+  const ordersRaw = useAppSelector(selectOrdersList);
+  const orders = Array.isArray(ordersRaw) ? ordersRaw : [];
+
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -18,9 +32,10 @@ const OrdersPage: React.FC = () => {
   }, [dispatch]);
 
   const filteredOrders = orders.filter((order) =>
-    order.orderId.toLowerCase().includes(searchQuery.toLowerCase())
+    (order.orderId ?? '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Empty orders screen
   if (orders.length === 0) {
     return (
       <Container maxWidth="md" sx={{ py: 8, textAlign: 'center' }}>
@@ -44,16 +59,34 @@ const OrdersPage: React.FC = () => {
         Order History
       </Typography>
 
-      <TextField fullWidth placeholder="Search by Order ID..." value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)} sx={{ my: 3 }}
-        InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+      <TextField
+        fullWidth
+        placeholder="Search by Order ID..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        sx={{ my: 3 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Search />
+            </InputAdornment>
+          ),
+        }}
+      />
 
       <Grid container spacing={3}>
         {filteredOrders.map((order) => (
-          <Grid size={{ xs: 12 }} key={order.orderId}>
+          <Grid key={order.orderId} size={{ xs: 12 }}>
             <Card>
               <CardContent>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'start',
+                    mb: 2,
+                  }}
+                >
                   <Box>
                     <Typography variant="h6">Order #{order.orderId}</Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -66,10 +99,14 @@ const OrdersPage: React.FC = () => {
                 </Box>
 
                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                  {order.items.length} item(s) • Status: {order.status || 'Processing'}
+                  {order.items?.length ?? 0} item(s) • Status: {order.status || 'Processing'}
                 </Typography>
 
-                <Button variant="outlined" onClick={() => navigate(`/orders/${order.orderId}`)} sx={{ mt: 2 }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate(`/orders/${order.orderId}`)}
+                  sx={{ mt: 2 }}
+                >
                   View Details
                 </Button>
               </CardContent>

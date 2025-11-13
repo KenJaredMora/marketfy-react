@@ -1,20 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    Alert,
-    Box,
-    Button,
-    CircularProgress,
-    Container,
-    Divider,
-    FormControlLabel,
-    Paper,
-    Radio,
-    RadioGroup,
-    TextField,
-    Typography,
-    Grid2 as Grid,
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Divider,
+  FormControlLabel,
+  Grid,
+  Paper,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -22,21 +23,29 @@ import { useAppDispatch } from '../../app/store/hooks';
 import { createOrder } from '../../app/store/slices/ordersSlice';
 import { ordersService } from '../../core/api/services';
 import { useCart } from '../../core/hooks';
-import { CheckoutFormData } from '../../core/types';
+import type { CheckoutFormData } from '../../core/types';
 import { formatCurrency } from '../../core/utils';
 
-const schema = yup.object({
-  fullName: yup.string().required('Full name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  address: yup.string().required('Address is required'),
-  city: yup.string().required('City is required'),
-  state: yup.string().required('State is required'),
-  zipCode: yup.string().required('ZIP code is required').matches(/^\d{5}$/, 'Invalid ZIP code'),
-  country: yup.string().required('Country is required'),
-  phone: yup.string().required('Phone is required'),
-  shippingMethod: yup.string().oneOf(['standard', 'express', 'overnight']).required(),
-  promoCode: yup.string(),
-}).required();
+const schema = yup
+  .object({
+    fullName: yup.string().required('Full name is required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    address: yup.string().required('Address is required'),
+    city: yup.string().required('City is required'),
+    state: yup.string().required('State is required'),
+    zipCode: yup
+      .string()
+      .required('ZIP code is required')
+      .matches(/^\d{5}$/, 'Invalid ZIP code'),
+    country: yup.string().required('Country is required'),
+    phone: yup.string().required('Phone is required'),
+    shippingMethod: yup
+      .string()
+      .oneOf(['standard', 'express', 'overnight'])
+      .required('Shipping method is required'),
+    promoCode: yup.string().optional(),
+  })
+  .required();
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,18 +54,34 @@ const CheckoutPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<CheckoutFormData>({
-    resolver: yupResolver(schema),
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<CheckoutFormData>({
+    // Cast to any so TS stops trying to reconcile yup's inferred type
+    resolver: yupResolver(schema) as any,
     defaultValues: {
-      shippingMethod: 'standard',
+      fullName: '',
+      email: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
       country: 'United States',
+      phone: '',
+      shippingMethod: 'standard',
+      promoCode: '',
     },
   });
 
-  const shippingMethod = watch('shippingMethod');
+  const shippingMethod = watch('shippingMethod') || 'standard';
   const promoCode = watch('promoCode');
 
-  const shipping = ordersService.calculateShipping(shippingMethod as any);
+  const shipping = ordersService.calculateShipping(
+    shippingMethod as 'standard' | 'express' | 'overnight'
+  );
   const discount = promoCode ? ordersService.applyPromoCode(promoCode, total) : 0;
   const finalTotal = total + shipping - discount;
 
@@ -65,7 +90,7 @@ const CheckoutPage: React.FC = () => {
     return null;
   }
 
-  const onSubmit = async (data: CheckoutFormData) => {
+  const onSubmit: SubmitHandler<CheckoutFormData> = async (data) => {
     setIsSubmitting(true);
     setError(null);
 
@@ -87,7 +112,11 @@ const CheckoutPage: React.FC = () => {
         Checkout
       </Typography>
 
-      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       <Grid container spacing={3} sx={{ mt: 1 }}>
         <Grid size={{ xs: 12, md: 8 }}>
@@ -99,60 +128,125 @@ const CheckoutPage: React.FC = () => {
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
-                  <TextField fullWidth label="Full Name" {...register('fullName')}
-                    error={!!errors.fullName} helperText={errors.fullName?.message} />
+                  <TextField
+                    fullWidth
+                    label="Full Name"
+                    {...register('fullName')}
+                    error={!!errors.fullName}
+                    helperText={errors.fullName?.message}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField fullWidth label="Email" {...register('email')}
-                    error={!!errors.email} helperText={errors.email?.message} />
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    {...register('email')}
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField fullWidth label="Address" {...register('address')}
-                    error={!!errors.address} helperText={errors.address?.message} />
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    {...register('address')}
+                    error={!!errors.address}
+                    helperText={errors.address?.message}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField fullWidth label="City" {...register('city')}
-                    error={!!errors.city} helperText={errors.city?.message} />
+                  <TextField
+                    fullWidth
+                    label="City"
+                    {...register('city')}
+                    error={!!errors.city}
+                    helperText={errors.city?.message}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField fullWidth label="State" {...register('state')}
-                    error={!!errors.state} helperText={errors.state?.message} />
+                  <TextField
+                    fullWidth
+                    label="State"
+                    {...register('state')}
+                    error={!!errors.state}
+                    helperText={errors.state?.message}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField fullWidth label="ZIP Code" {...register('zipCode')}
-                    error={!!errors.zipCode} helperText={errors.zipCode?.message} />
+                  <TextField
+                    fullWidth
+                    label="ZIP Code"
+                    {...register('zipCode')}
+                    error={!!errors.zipCode}
+                    helperText={errors.zipCode?.message}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField fullWidth label="Country" {...register('country')}
-                    error={!!errors.country} helperText={errors.country?.message} />
+                  <TextField
+                    fullWidth
+                    label="Country"
+                    {...register('country')}
+                    error={!!errors.country}
+                    helperText={errors.country?.message}
+                  />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField fullWidth label="Phone" {...register('phone')}
-                    error={!!errors.phone} helperText={errors.phone?.message} />
+                  <TextField
+                    fullWidth
+                    label="Phone"
+                    {...register('phone')}
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message}
+                  />
                 </Grid>
 
                 <Grid size={{ xs: 12 }}>
                   <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
                     Shipping Method
                   </Typography>
-                  <RadioGroup {...register('shippingMethod')}>
-                    <FormControlLabel value="standard" control={<Radio />}
-                      label={`Standard Shipping - ${formatCurrency(5.99)} (5-7 business days)`} />
-                    <FormControlLabel value="express" control={<Radio />}
-                      label={`Express Shipping - ${formatCurrency(12.99)} (2-3 business days)`} />
-                    <FormControlLabel value="overnight" control={<Radio />}
-                      label={`Overnight Shipping - ${formatCurrency(24.99)} (1 business day)`} />
+                  <RadioGroup>
+                    <FormControlLabel
+                      value="standard"
+                      control={<Radio {...register('shippingMethod')} />}
+                      label={`Standard Shipping - ${formatCurrency(
+                        5.99
+                      )} (5-7 business days)`}
+                    />
+                    <FormControlLabel
+                      value="express"
+                      control={<Radio {...register('shippingMethod')} />}
+                      label={`Express Shipping - ${formatCurrency(
+                        12.99
+                      )} (2-3 business days)`}
+                    />
+                    <FormControlLabel
+                      value="overnight"
+                      control={<Radio {...register('shippingMethod')} />}
+                      label={`Overnight Shipping - ${formatCurrency(
+                        24.99
+                      )} (1 business day)`}
+                    />
                   </RadioGroup>
                 </Grid>
 
                 <Grid size={{ xs: 12 }}>
-                  <TextField fullWidth label="Promo Code (Optional)" {...register('promoCode')}
-                    helperText="Try: SAVE10, SAVE20, FIRSTORDER" />
+                  <TextField
+                    fullWidth
+                    label="Promo Code (Optional)"
+                    {...register('promoCode')}
+                    helperText="Try: SAVE10, SAVE20, FIRSTORDER"
+                  />
                 </Grid>
               </Grid>
 
-              <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 3 }}
-                disabled={isSubmitting}>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                fullWidth
+                sx={{ mt: 3 }}
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? <CircularProgress size={24} /> : 'Place Order'}
               </Button>
             </Box>
@@ -190,7 +284,9 @@ const CheckoutPage: React.FC = () => {
             {discount > 0 && (
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                 <Typography color="success.main">Discount:</Typography>
-                <Typography color="success.main">-{formatCurrency(discount)}</Typography>
+                <Typography color="success.main">
+                  -{formatCurrency(discount)}
+                </Typography>
               </Box>
             )}
 
@@ -198,7 +294,9 @@ const CheckoutPage: React.FC = () => {
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h6">Total:</Typography>
-              <Typography variant="h6" color="primary">{formatCurrency(finalTotal)}</Typography>
+              <Typography variant="h6" color="primary">
+                {formatCurrency(finalTotal)}
+              </Typography>
             </Box>
           </Paper>
         </Grid>
