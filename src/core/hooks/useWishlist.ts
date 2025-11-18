@@ -10,7 +10,6 @@ import {
   selectWishlistItems,
   selectWishlistLoading,
   selectWishlistError,
-  selectWishlistCount,
   selectIsAuthenticated,
 } from '../../app/store/selectors';
 import { showSuccessToast, showErrorToast } from '../../app/store/slices/uiSlice';

@@ -10,7 +10,7 @@ import {
 import {
   fetchCurrentUser,
   login as loginAction,
-  logout as logoutAction,
+  logoutThunk,
   register as registerAction,
 } from '../../app/store/slices/authSlice';
 import { clearOrders } from '../../app/store/slices/ordersSlice';
@@ -71,7 +71,7 @@ export const useAuth = () => {
    * Logout user and clear all data
    */
   const logout = useCallback(() => {
-    dispatch(logoutAction());
+    dispatch(logoutThunk());
     dispatch(clearWishlist());
     dispatch(clearOrders());
     navigate('/auth');

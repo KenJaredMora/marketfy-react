@@ -92,4 +92,13 @@ export const STORAGE_KEYS = {
   THEME: 'theme_preference',
 } as const;
 
+/**
+ * Get user-specific cart key
+ * Returns cart key with userId suffix if user is logged in
+ */
+export const getCartKey = (): string => {
+  const userId = LocalStorageUtil.getString(STORAGE_KEYS.USER_ID);
+  return userId ? `${STORAGE_KEYS.CART}_${userId}` : STORAGE_KEYS.CART;
+};
+
 export default LocalStorageUtil;

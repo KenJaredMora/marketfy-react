@@ -2,6 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { authService } from '../../../core/api/services';
 import type { AuthResponse, LoginCredentials, RegisterData, User } from '../../../core/types';
+import { loadCart } from './cartSlice';
 
 interface AuthState {
   user: User | null;
@@ -26,10 +27,12 @@ const initialState: AuthState = {
  */
 export const login = createAsyncThunk<AuthResponse, LoginCredentials>(
   'auth/login',
-  async (credentials, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue, dispatch }) => {
     try {
       const response = await authService.login(credentials);
       authService.storeAuthData(response.access_token, response.userId);
+      // Reload cart for the logged-in user
+      dispatch(loadCart());
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Login failed');
@@ -42,10 +45,12 @@ export const login = createAsyncThunk<AuthResponse, LoginCredentials>(
  */
 export const register = createAsyncThunk<AuthResponse, RegisterData>(
   'auth/register',
-  async (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     try {
       const response = await authService.register(data);
       authService.storeAuthData(response.access_token, response.userId);
+      // Reload cart for the newly registered user
+      dispatch(loadCart());
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Registration failed');
@@ -65,6 +70,18 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     } catch (error: any) {
       return rejectWithValue(error.message || 'Failed to fetch user');
     }
+  }
+);
+
+/**
+ * Async thunk for logout
+ */
+export const logoutThunk = createAsyncThunk(
+  'auth/logout',
+  async (_, { dispatch }) => {
+    authService.clearAuthData();
+    // Reload cart to clear user-specific cart data
+    dispatch(loadCart());
   }
 );
 
@@ -154,6 +171,15 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       });
+
+    // Logout Thunk
+    builder.addCase(logoutThunk.fulfilled, (state) => {
+      state.user = null;
+      state.token = null;
+      state.userId = null;
+      state.isAuthenticated = false;
+      state.error = null;
+    });
   },
 });
 

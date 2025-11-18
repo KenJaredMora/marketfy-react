@@ -5,4 +5,4 @@
 
 export * from './formatters';
 export * from './validators';
-export { LocalStorageUtil, STORAGE_KEYS } from './localStorage';
+export { LocalStorageUtil, STORAGE_KEYS, getCartKey } from './localStorage';

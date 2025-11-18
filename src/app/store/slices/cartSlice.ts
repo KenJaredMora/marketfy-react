@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { CartItem, Product } from '../../../core/types';
-import { LocalStorageUtil, STORAGE_KEYS } from '../../../core/utils';
+import { LocalStorageUtil, getCartKey } from '../../../core/utils';
 
 interface CartState {
   items: CartItem[];
@@ -10,18 +10,18 @@ interface CartState {
 }
 
 /**
- * Load cart from localStorage
+ * Load cart from localStorage using user-specific key
  */
 const loadCartFromStorage = (): CartItem[] => {
-  const savedCart = LocalStorageUtil.getItem<CartItem[]>(STORAGE_KEYS.CART);
+  const savedCart = LocalStorageUtil.getItem<CartItem[]>(getCartKey());
   return savedCart || [];
 };
 
 /**
- * Save cart to localStorage
+ * Save cart to localStorage using user-specific key
  */
 const saveCartToStorage = (items: CartItem[]): void => {
-  LocalStorageUtil.setItem(STORAGE_KEYS.CART, items);
+  LocalStorageUtil.setItem(getCartKey(), items);
 };
 
 /**
