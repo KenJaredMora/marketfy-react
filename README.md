@@ -2,6 +2,19 @@
 
 A modern, full-featured e-commerce platform built with React, TypeScript, Redux Toolkit, and Material-UI. This is a complete React implementation migrated from Angular, following best practices, clean code principles, and SOLID design patterns.
 
+## 🌐 Production Deployment
+
+**Live App**: <http://marketfy-alb-1492993669.us-east-1.elb.amazonaws.com/react/products>
+
+**Demo Credentials:**
+
+- Email: `demo@marketfy.test`
+- Password: `password123`
+
+Deployed on AWS ECS with Docker containers, nginx server, and Application Load Balancer routing.
+
+---
+
 ## 🚀 Quick Start
 
 ```bash
@@ -36,11 +49,6 @@ Password: password123
 - ✅ Responsive design
 - ✅ Toast notifications
 - ✅ Protected routes
-
-## 📖 Documentation
-
-- **[IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md)** - Complete project overview and architecture
-- **[COMPONENT_TEMPLATES.md](./COMPONENT_TEMPLATES.md)** - Copy-paste templates for all components
 
 ## 🛠️ Tech Stack
 
@@ -172,21 +180,4 @@ VITE_API_URL=http://localhost:3000
 - Touch-friendly interfaces
 - Responsive navigation
 
-## 🐛 Troubleshooting
-
-**Backend not connecting?**
-
-- Check backend is running on port 3000
-- Verify `.env` has correct API_URL
-
-**Build errors?**
-
-- Clear cache: `rm -rf node_modules && npm install`
-
-**TypeScript errors?**
-
-- Restart TypeScript server in VS Code
-
 ---
-
-**Ready to code?** I recommend you to use/open **COMPONENT_TEMPLATES.md** and start building! 🚀
