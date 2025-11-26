@@ -1,4 +1,3 @@
-// src/features/profile/ProfilePage.tsx
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,

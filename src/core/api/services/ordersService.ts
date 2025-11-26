@@ -1,4 +1,3 @@
-// src/core/api/services/ordersService.ts
 import type { CartItem, CheckoutFormData, Order } from '../../types';
 import apiClient from '../apiClient';
 

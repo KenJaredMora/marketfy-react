@@ -1,4 +1,3 @@
-// src/features/auth/components/RegisterForm.tsx
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Box, Button, CircularProgress, Grid, TextField } from '@mui/material';
 import React from 'react';

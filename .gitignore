@@ -1,11 +1,3 @@
-# ====================================================================================
-# MARKETFY REACT .GITIGNORE
-# ====================================================================================
-
-# ====================================================================================
-# ⚠️ SENSITIVE FILES - StayInLocal - NEVER COMMIT THESE ⚠️
-# ====================================================================================
-
 # Environment Variables - StayInLocal (API URLs, keys, tokens)
 .env
 .env.*
@@ -16,7 +8,7 @@
 *.local
 !.env.example
 
-# AWS & Credentials - StayInLocal
+# AWS & Credentials
 .aws/
 *.pem
 *.key

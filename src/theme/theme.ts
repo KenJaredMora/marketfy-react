@@ -1,11 +1,5 @@
 import { createTheme, type ThemeOptions } from '@mui/material/styles';
 
-/**
- * Material-UI Theme Configuration
- * Defines the color palette, typography, and component customization
- * Follows Material Design principles with custom brand colors
- */
-
 const themeOptions: ThemeOptions = {
   palette: {
     mode: 'light',
